@@ -1,0 +1,36 @@
+import sys
+import pandas as pd
+import pymongo
+import json
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
+#import mysql.connector
+from pymongo import MongoClient
+#from urllib.parse import quote_plus
+try:
+    from urllib import quote_plus  
+except ImportError:
+    from urllib.parse import quote_plus  
+from mongoengine import Document, EmbeddedDocument, fields 
+from mongoengine.connection import get_db, connect
+
+username = urllib.parse.quote_plus('xyz')
+password = urllib.parse.quote_plus('999')
+client = MongoClient('mongodb://%s:%s@localhost/?authSource=admin' % (username, password))
+db = client['database_name']
+arr = [] 
+        
+collection = db.collection_name.find({"date":{'$eq': '2020-09-11'}})
+# Expand the cursor and construct the DataFrame
+df =  pd.DataFrame(list(collection))
+
+        
+directory = './files/'
+        
+file_path = os.path.join(directory, 'csv_2020-07-05.csv')
+
+#save the result on desktop 
+df.to_csv(file_path, index=False)
+        
